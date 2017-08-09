@@ -82,8 +82,8 @@ Possible choices include easy, medium, and hard.\n''')
 
 	while level not in ["easy", "medium", "hard"]:
 		print ("That's not an option")
-		level = raw_input('''Please select a game difficulty by typing it in! 
-Possible choices include easy, medium, and hard.''')
+		level = raw_input('''\nPlease select a game difficulty by typing it in! 
+Possible choices include easy, medium, and hard.\n''')
 
 	output = "\nYou've chosen " + level + "!\n" \
 			 "You will get 5 guesses pwe problem\n" \
@@ -95,28 +95,44 @@ Possible choices include easy, medium, and hard.''')
 
 
 def quiz (answers, sample):
-	#The quiz function runs the fill in the blank questionaire.
-	#It takes as arguments the sample text "sample" and the list of answers "answers"
+	"""Play the game Fill in the Blanks
+	Args:
+    	answers: (list) Answers to the Fill in the Blanks as strings.
+    	sample: (str) text with blanks.
+    Behavior:
+    	User gets a text filled blanks depending on the chosen level
+    	and is asked to fill each blank
+    Returns:
+    	The sample with the blank filled if user answer is correct,
+    	or another prompt if incorrect. Up to 5 tries are permitted 
+    	per blank space	
+	"""
+
 	for text in answers:
 		print (sample)
 		index = answers.index(text)
 		string = "___" + str (index+1) + "___"
 		answer = raw_input("\nWhat should be substituted in for " + string + "?")	
-		while answer != answers[index]:
+		if answer == answers[index]:
+			print sample.replace(string, answer)
+			sample = sample.replace(string, answer)
+		else:
 			count = 1
 			max_tries = 5
-			while count < max_tries:
-				print "\nThat isn't the correct answer!  Let's try again; you have " + str(max_tries - count) +" try(s) left!\n"
+			while answer != answers[index]:
+				print "\nThat isn't the correct answer!  Let's try again; you have " + str(max_tries - count) +" try/tries left!\n"
 				print (sample)
-				answer = raw_input("\nWhat should be substituted in for " + string + "?")	
-				count = count + 1
-			print "\nGame over!!!\n"
+				answer = raw_input("\nWhat should be substituted in for " + string + "?")
+				count +=1
+				if count == max_tries and answer != answers[index]:
+					print ("\nGame Over\n")
+					break
+				continue
+			else:
+				print (sample.replace(string, answer))
+				sample = sample.replace(string, answer)
+				continue
 			break
-		else:
-			print sample.replace(string, answer)
-			print "\n"
-			sample = sample.replace(string, answer)
-			continue
-		break
+
 
 difficulty()
